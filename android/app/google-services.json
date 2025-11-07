@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1022391841459",
+    "project_id": "nutri-box-ltkzj1",
+    "storage_bucket": "nutri-box-ltkzj1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022391841459:android:62aad66abaf014a7f536c6",
+        "android_client_info": {
+          "package_name": "com.nutribox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI_RhQbXde3HqSqTzdCpnz1xh9Yqe8qWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022391841459:android:3fd5c3fac248e3c1f536c6",
+        "android_client_info": {
+          "package_name": "com.shevasilfialfa.nutribox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI_RhQbXde3HqSqTzdCpnz1xh9Yqe8qWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

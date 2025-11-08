@@ -1,0 +1,4 @@
+admin_id,name,email,password,created_at,updated_at
+1,"Admin Katering","admin@katering.com","hash_password_admin_123","2025-11-08 10:00:00","2025-11-08 10:00:00"
+2,"Super Admin","super@katering.com","hash_password_super_456","2025-11-08 10:00:01","2025-11-08 10:00:01"
+3,"Admin Keuangan","finance@katering.com","hash_password_finance_789","2025-11-08 10:00:02","2025-11-08 10:00:02"

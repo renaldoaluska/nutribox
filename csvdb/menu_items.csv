@@ -1,0 +1,11 @@
+item_id,outlet_id,name,description,price,unit,category,min_order_qty,min_preorder_days,image_url,is_available
+1,1,"Nasi Kotak Ayam Bakar","Nasi, Ayam Bakar Bumbu Rujak, Tahu, Tempe, Sambal, Lalapan",25000,"box","Nasi Kotak",20,3,"http://example.com/ayam_bakar.png",true
+2,1,"Snack Box Premium","Isi: Risoles Mayo, Sosis Solo, Puding Coklat",15000,"box","Snack",30,2,"http://example.com/snack_box.png",true
+3,1,"Tumpeng Mini","Tumpeng porsi personal lengkap dengan lauk",35000,"pax","Tumpeng",10,3,"http://example.com/tumpeng_mini.png",true
+4,2,"Paket Prasmanan Sehat","Menu A: Nasi Merah, Ikan Dori Asam Manis, Capcay, Salad Buah",75000,"pax","Prasmanan",50,5,"http://example.com/prasmanan.png",true
+5,2,"Healthy Lunch Box Harian","Menu diet harian, ganti setiap hari",55000,"box","Langganan",1,1,"http://example.com/healthy_box.png",true
+6,2,"Cold Pressed Juice","Paket 5 botol jus sayur dan buah murni",150000,"paket","Minuman",1,1,"http://example.com/juice.png",true
+7,3,"Tumpeng Nasi Kuning (Medium)","Untuk 20 porsi. Lauk: Ayam goreng, perkedel, dll",600000,"pcs","Tumpeng",1,2,"http://example.com/tumpeng_m.png",true
+8,3,"Tumpeng Nasi Uduk (Large)","Untuk 40 porsi. Lauk lengkap khas betawi",1100000,"pcs","Tumpeng",1,3,"http://example.com/tumpeng_l.png",true
+9,4,"Paket Snack A (3 Kue)","Kue Sus, Lemper, Lapis Surabaya",12000,"box","Snack",50,2,"http://example.com/snack_a.png",false
+10,4,"Paket Snack B (Kopi + 2 Kue)","Kopi susu botol, Risoles, Donat Gula",22000,"box","Snack",30,2,"http://example.com/snack_b.png",false

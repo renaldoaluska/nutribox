@@ -1,0 +1,8 @@
+address_id,customer_id,label,recipient_name,phone_number,address_detail,latitude,longitude,is_primary
+1,1,"Rumah","Budi Santoso","081234567890","Jl. Merpati Putih No. 15, Surabaya, 60111",-7.2576,112.7522,true
+2,1,"Kantor","Budi (Penerima)","081234567890","Gedung ABC Tower Lt. 5, Jl. Basuki Rahmat, Surabaya",-7.2580,112.7530,false
+3,2,"Apartemen","Citra Lestari","089876543210","Apartemen Puncak Kertajaya Tower B No. 1010",-7.2915,112.7305,true
+4,3,"Rumah","Doni Firmansyah","081222223333","Jl. Kebon Jeruk No. 1, Jakarta Barat",-6.1954,106.7863,true
+5,3,"Kantor","Doni (HRD)","081222223333","Wisma BCA Lt. 10, Jl. Sudirman",-6.2000,106.8000,false
+6,4,"Rumah","Elisa Wijaya","081333334444","Perumahan Pondok Indah, Jl. Duta Niaga",-6.2600,106.7800,true
+7,5,"Kantor","Fajar (Sekretaris)","081444445555","Menara Mandiri, Jl. Gatot Subroto",-6.2297,106.8090,true

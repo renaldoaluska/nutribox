@@ -1,8 +1,0 @@
-payment_id,order_id,amount,payment_method,status,payment_date,transaction_id
-1,1,700000,"ewallet","lunas","2025-11-01 14:32:00","EWL-TRX-1001"
-2,2,3750000,"transfer","lunas","2025-11-05 09:20:00","VA-BCA-1002"
-3,3,500000,"transfer","pending",NULL,"VA-BCA-1003"
-4,"4",1700000,"cod","lunas","2025-11-07 14:05:00","COD-1004"
-5,5,850000,"ewallet","lunas","2025-11-06 17:05:00","EWL-TRX-1005"
-6,6,1500000,"transfer","gagal",NULL,"VA-MANDIRI-1006"
-7,7,1050000,"transfer","lunas","2025-11-02 16:05:00","VA-BCA-1007"

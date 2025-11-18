@@ -1,9 +1,9 @@
-import '/components/sign_out_modal_widget.dart';
-import '/components/tab_bar_widget.dart';
+import '/customer_user/tab_bar/tab_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/modals/sign_out_modal/sign_out_modal_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
 import '/flutter_flow/flutter_flow_util.dart';
 
@@ -91,9 +93,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => NotificationPageWidget(),
         ),
         FFRoute(
-          name: DetailsPageWidget.routeName,
-          path: DetailsPageWidget.routePath,
-          builder: (context, params) => DetailsPageWidget(),
+          name: OutletDetailsPageWidget.routeName,
+          path: OutletDetailsPageWidget.routePath,
+          builder: (context, params) => OutletDetailsPageWidget(
+            id: params.getParam(
+              'id',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['outlets'],
+            ),
+          ),
         ),
         FFRoute(
           name: PaymentAndAddressWidget.routeName,
@@ -166,16 +175,129 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => DaftarOutletWidget(),
         ),
         FFRoute(
-          name: DetailOutletWidget.routeName,
-          path: DetailOutletWidget.routePath,
-          builder: (context, params) => DetailOutletWidget(
-            id: params.getParam(
-              'id',
-              ParamType.DocumentReference,
-              isList: false,
-              collectionNamePath: ['outlet'],
-            ),
-          ),
+          name: CobaoutletpageWidget.routeName,
+          path: CobaoutletpageWidget.routePath,
+          builder: (context, params) => CobaoutletpageWidget(),
+        ),
+        FFRoute(
+          name: AdminHomePageWidget.routeName,
+          path: AdminHomePageWidget.routePath,
+          builder: (context, params) => AdminHomePageWidget(),
+        ),
+        FFRoute(
+          name: OutletPageWidget.routeName,
+          path: OutletPageWidget.routePath,
+          builder: (context, params) => OutletPageWidget(),
+        ),
+        FFRoute(
+          name: MenuDetailsPageWidget.routeName,
+          path: MenuDetailsPageWidget.routePath,
+          builder: (context, params) => MenuDetailsPageWidget(),
+        ),
+        FFRoute(
+          name: AdminHomePage2Widget.routeName,
+          path: AdminHomePage2Widget.routePath,
+          builder: (context, params) => AdminHomePage2Widget(),
+        ),
+        FFRoute(
+          name: AdminPageWidget.routeName,
+          path: AdminPageWidget.routePath,
+          builder: (context, params) => AdminPageWidget(),
+        ),
+        FFRoute(
+          name: HomeDetailPageWidget.routeName,
+          path: HomeDetailPageWidget.routePath,
+          builder: (context, params) => HomeDetailPageWidget(),
+        ),
+        FFRoute(
+          name: PaymentVerificationWidget.routeName,
+          path: PaymentVerificationWidget.routePath,
+          builder: (context, params) => PaymentVerificationWidget(),
+        ),
+        FFRoute(
+          name: PaymentVerificationSucessWidget.routeName,
+          path: PaymentVerificationSucessWidget.routePath,
+          builder: (context, params) => PaymentVerificationSucessWidget(),
+        ),
+        FFRoute(
+          name: VerifOutletPageWidget.routeName,
+          path: VerifOutletPageWidget.routePath,
+          builder: (context, params) => VerifOutletPageWidget(),
+        ),
+        FFRoute(
+          name: VerifOutletSucessWidget.routeName,
+          path: VerifOutletSucessWidget.routePath,
+          builder: (context, params) => VerifOutletSucessWidget(),
+        ),
+        FFRoute(
+          name: CustOrderPageWidget.routeName,
+          path: CustOrderPageWidget.routePath,
+          builder: (context, params) => CustOrderPageWidget(),
+        ),
+        FFRoute(
+          name: OrderDetailPageWidget.routeName,
+          path: OrderDetailPageWidget.routePath,
+          builder: (context, params) => OrderDetailPageWidget(),
+        ),
+        FFRoute(
+          name: LogoutPageWidget.routeName,
+          path: LogoutPageWidget.routePath,
+          builder: (context, params) => LogoutPageWidget(),
+        ),
+        FFRoute(
+          name: AdminDetailPageWidget.routeName,
+          path: AdminDetailPageWidget.routePath,
+          builder: (context, params) => AdminDetailPageWidget(),
+        ),
+        FFRoute(
+          name: BOrderPageWidget.routeName,
+          path: BOrderPageWidget.routePath,
+          builder: (context, params) => BOrderPageWidget(),
+        ),
+        FFRoute(
+          name: AHomeMerchantWidget.routeName,
+          path: AHomeMerchantWidget.routePath,
+          builder: (context, params) => AHomeMerchantWidget(),
+        ),
+        FFRoute(
+          name: COrderDetailSubsWidget.routeName,
+          path: COrderDetailSubsWidget.routePath,
+          builder: (context, params) => COrderDetailSubsWidget(),
+        ),
+        FFRoute(
+          name: DOrderDetailEventWidget.routeName,
+          path: DOrderDetailEventWidget.routePath,
+          builder: (context, params) => DOrderDetailEventWidget(),
+        ),
+        FFRoute(
+          name: ERoomChatWidget.routeName,
+          path: ERoomChatWidget.routePath,
+          builder: (context, params) => ERoomChatWidget(),
+        ),
+        FFRoute(
+          name: FMerchantSayaWidget.routeName,
+          path: FMerchantSayaWidget.routePath,
+          builder: (context, params) => FMerchantSayaWidget(),
+        ),
+        FFRoute(
+          name: KelolaPaketWidget.routeName,
+          path: KelolaPaketWidget.routePath,
+          builder: (context, params) => KelolaPaketWidget(),
+        ),
+        FFRoute(
+          name: SssWidget.routeName,
+          path: SssWidget.routePath,
+          builder: (context, params) => SssWidget(),
+        ),
+        FFRoute(
+          name: QqqWidget.routeName,
+          path: QqqWidget.routePath,
+          builder: (context, params) => QqqWidget(),
+        ),
+        FFRoute(
+          name: AaaWidget.routeName,
+          path: AaaWidget.routePath,
+          builder: (context, params) => AaaWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -248,6 +370,7 @@ class FFParameters {
     ParamType type, {
     bool isList = false,
     List<String>? collectionNamePath,
+    StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -266,6 +389,7 @@ class FFParameters {
       type,
       isList,
       collectionNamePath: collectionNamePath,
+      structBuilder: structBuilder,
     );
   }
 }

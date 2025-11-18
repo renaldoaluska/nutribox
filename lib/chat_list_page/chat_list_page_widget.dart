@@ -1,4 +1,4 @@
-import '/components/tab_bar_widget.dart';
+import '/customer_user/tab_bar/tab_bar_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';

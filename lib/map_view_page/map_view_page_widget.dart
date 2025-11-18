@@ -1,7 +1,7 @@
-import '/components/modal_map_view_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/modals/modal_map_view/modal_map_view_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,10 +79,13 @@ class _MapViewPageWidgetState extends State<MapViewPageWidget> {
                       ),
                       child: Stack(
                         children: [
-                          Image.asset(
-                            'assets/images/Map.png',
-                            height: MediaQuery.sizeOf(context).height * 1.0,
-                            fit: BoxFit.fill,
+                          Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Image.asset(
+                              'assets/images/Map.png',
+                              height: MediaQuery.sizeOf(context).height * 1.0,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(

@@ -601,8 +601,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                   child: FFButtonWidget(
-                    onPressed: () async {
-                      context.pushNamed(HomePageWidget.routeName);
+                    onPressed: () {
+                      print('Button pressed ...');
                     },
                     text: 'Register',
                     options: FFButtonOptions(

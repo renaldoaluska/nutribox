@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 
+import '/auth/base_auth_user_provider.dart';
+
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
@@ -22,7 +24,46 @@ class AppStateNotifier extends ChangeNotifier {
   static AppStateNotifier? _instance;
   static AppStateNotifier get instance => _instance ??= AppStateNotifier._();
 
+  BaseAuthUser? initialUser;
+  BaseAuthUser? user;
   bool showSplashImage = true;
+  String? _redirectLocation;
+
+  /// Determines whether the app will refresh and build again when a sign
+  /// in or sign out happens. This is useful when the app is launched or
+  /// on an unexpected logout. However, this must be turned off when we
+  /// intend to sign in/out and then navigate or perform any actions after.
+  /// Otherwise, this will trigger a refresh and interrupt the action(s).
+  bool notifyOnAuthChange = true;
+
+  bool get loading => user == null || showSplashImage;
+  bool get loggedIn => user?.loggedIn ?? false;
+  bool get initiallyLoggedIn => initialUser?.loggedIn ?? false;
+  bool get shouldRedirect => loggedIn && _redirectLocation != null;
+
+  String getRedirectLocation() => _redirectLocation!;
+  bool hasRedirect() => _redirectLocation != null;
+  void setRedirectLocationIfUnset(String loc) => _redirectLocation ??= loc;
+  void clearRedirectLocation() => _redirectLocation = null;
+
+  /// Mark as not needing to notify on a sign in / out when we intend
+  /// to perform subsequent actions (such as navigation) afterwards.
+  void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
+
+  void update(BaseAuthUser newUser) {
+    final shouldUpdate =
+        user?.uid == null || newUser.uid == null || user?.uid != newUser.uid;
+    initialUser ??= newUser;
+    user = newUser;
+    // Refresh the app on auth change unless explicitly marked otherwise.
+    // No need to update unless the user has changed.
+    if (notifyOnAuthChange && shouldUpdate) {
+      notifyListeners();
+    }
+    // Once again mark the notifier as needing to update on auth change
+    // (in order to catch sign in / out events).
+    updateNotifyOnAuthChange(true);
+  }
 
   void stopShowingSplashImage() {
     showSplashImage = false;
@@ -35,12 +76,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => Onboarding1Widget(),
+      errorBuilder: (context, state) =>
+          appStateNotifier.loggedIn ? HomePageWidget() : LoginPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => Onboarding1Widget(),
+          builder: (context, _) =>
+              appStateNotifier.loggedIn ? HomePageWidget() : LoginPageWidget(),
         ),
         FFRoute(
           name: Onboarding1Widget.routeName,
@@ -85,6 +128,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: HomePageWidget.routeName,
           path: HomePageWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => HomePageWidget(),
         ),
         FFRoute(
@@ -137,7 +181,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: MyCartPageWidget.routeName,
           path: MyCartPageWidget.routePath,
-          builder: (context, params) => MyCartPageWidget(),
+          builder: (context, params) => MyCartPageWidget(
+            outlet: params.getParam(
+              'outlet',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['outlets'],
+            ),
+          ),
         ),
         FFRoute(
           name: ProfilePageWidget.routeName,
@@ -170,11 +221,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => AddCardv2PageWidget(),
         ),
         FFRoute(
-          name: DaftarOutletWidget.routeName,
-          path: DaftarOutletWidget.routePath,
-          builder: (context, params) => DaftarOutletWidget(),
-        ),
-        FFRoute(
           name: CobaoutletpageWidget.routeName,
           path: CobaoutletpageWidget.routePath,
           builder: (context, params) => CobaoutletpageWidget(),
@@ -202,7 +248,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: AdminPageWidget.routeName,
           path: AdminPageWidget.routePath,
-          builder: (context, params) => AdminPageWidget(),
+          requireAuth: true,
+          builder: (context, params) => AdminPageWidget(
+            refKeOrder: params.getParam(
+              'refKeOrder',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['orders'],
+            ),
+          ),
         ),
         FFRoute(
           name: HomeDetailPageWidget.routeName,
@@ -212,32 +266,43 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: PaymentVerificationWidget.routeName,
           path: PaymentVerificationWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => PaymentVerificationWidget(),
         ),
         FFRoute(
-          name: PaymentVerificationSucessWidget.routeName,
-          path: PaymentVerificationSucessWidget.routePath,
-          builder: (context, params) => PaymentVerificationSucessWidget(),
+          name: PaymentVerificationSucessGapakeWidget.routeName,
+          path: PaymentVerificationSucessGapakeWidget.routePath,
+          builder: (context, params) => PaymentVerificationSucessGapakeWidget(),
         ),
         FFRoute(
           name: VerifOutletPageWidget.routeName,
           path: VerifOutletPageWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => VerifOutletPageWidget(),
         ),
         FFRoute(
-          name: VerifOutletSucessWidget.routeName,
-          path: VerifOutletSucessWidget.routePath,
-          builder: (context, params) => VerifOutletSucessWidget(),
+          name: VerifOutletSucessGapakeWidget.routeName,
+          path: VerifOutletSucessGapakeWidget.routePath,
+          builder: (context, params) => VerifOutletSucessGapakeWidget(),
         ),
         FFRoute(
           name: CustOrderPageWidget.routeName,
           path: CustOrderPageWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => CustOrderPageWidget(),
         ),
         FFRoute(
           name: OrderDetailPageWidget.routeName,
           path: OrderDetailPageWidget.routePath,
-          builder: (context, params) => OrderDetailPageWidget(),
+          requireAuth: true,
+          builder: (context, params) => OrderDetailPageWidget(
+            orderDetail: params.getParam(
+              'orderDetail',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['orders'],
+            ),
+          ),
         ),
         FFRoute(
           name: LogoutPageWidget.routeName,
@@ -245,59 +310,213 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => LogoutPageWidget(),
         ),
         FFRoute(
-          name: AdminDetailPageWidget.routeName,
-          path: AdminDetailPageWidget.routePath,
-          builder: (context, params) => AdminDetailPageWidget(),
+          name: AdminDetailPageGapakeWidget.routeName,
+          path: AdminDetailPageGapakeWidget.routePath,
+          builder: (context, params) => AdminDetailPageGapakeWidget(),
         ),
         FFRoute(
-          name: BOrderPageWidget.routeName,
-          path: BOrderPageWidget.routePath,
-          builder: (context, params) => BOrderPageWidget(),
+          name: COrderPageWidget.routeName,
+          path: COrderPageWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => COrderPageWidget(),
         ),
         FFRoute(
           name: AHomeMerchantWidget.routeName,
           path: AHomeMerchantWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => AHomeMerchantWidget(),
         ),
         FFRoute(
-          name: COrderDetailSubsWidget.routeName,
-          path: COrderDetailSubsWidget.routePath,
-          builder: (context, params) => COrderDetailSubsWidget(),
-        ),
-        FFRoute(
-          name: DOrderDetailEventWidget.routeName,
-          path: DOrderDetailEventWidget.routePath,
-          builder: (context, params) => DOrderDetailEventWidget(),
-        ),
-        FFRoute(
-          name: ERoomChatWidget.routeName,
-          path: ERoomChatWidget.routePath,
-          builder: (context, params) => ERoomChatWidget(),
+          name: DOrderDetailWidget.routeName,
+          path: DOrderDetailWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => DOrderDetailWidget(
+            id: params.getParam(
+              'id',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['orders'],
+            ),
+          ),
         ),
         FFRoute(
           name: FMerchantSayaWidget.routeName,
           path: FMerchantSayaWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => FMerchantSayaWidget(),
         ),
         FFRoute(
-          name: KelolaPaketWidget.routeName,
-          path: KelolaPaketWidget.routePath,
-          builder: (context, params) => KelolaPaketWidget(),
+          name: GKelolaPaketWidget.routeName,
+          path: GKelolaPaketWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => GKelolaPaketWidget(
+            id: params.getParam(
+              'id',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['packages'],
+            ),
+          ),
         ),
         FFRoute(
-          name: SssWidget.routeName,
-          path: SssWidget.routePath,
-          builder: (context, params) => SssWidget(),
+          name: MRekeningPencairanWidget.routeName,
+          path: MRekeningPencairanWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => MRekeningPencairanWidget(),
         ),
         FFRoute(
-          name: QqqWidget.routeName,
-          path: QqqWidget.routePath,
-          builder: (context, params) => QqqWidget(),
+          name: NSyaratDanKetentuanWidget.routeName,
+          path: NSyaratDanKetentuanWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => NSyaratDanKetentuanWidget(),
         ),
         FFRoute(
-          name: AaaWidget.routeName,
-          path: AaaWidget.routePath,
-          builder: (context, params) => AaaWidget(),
+          name: OBantuanWidget.routeName,
+          path: OBantuanWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => OBantuanWidget(),
+        ),
+        FFRoute(
+          name: TProfilSayaWidget.routeName,
+          path: TProfilSayaWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => TProfilSayaWidget(),
+        ),
+        FFRoute(
+          name: ERoomChatWidget.routeName,
+          path: ERoomChatWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => ERoomChatWidget(),
+        ),
+        FFRoute(
+          name: RChatListWidget.routeName,
+          path: RChatListWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => RChatListWidget(),
+        ),
+        FFRoute(
+          name: SLogoutPageWidget.routeName,
+          path: SLogoutPageWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => SLogoutPageWidget(),
+        ),
+        FFRoute(
+          name: TEditProfileWidget.routeName,
+          path: TEditProfileWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => TEditProfileWidget(
+            profilSaya: params.getParam(
+              'profilSaya',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['users'],
+            ),
+          ),
+        ),
+        FFRoute(
+          name: OutletListWidget.routeName,
+          path: OutletListWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => OutletListWidget(),
+        ),
+        FFRoute(
+          name: OutletDetailWidget.routeName,
+          path: OutletDetailWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => OutletDetailWidget(
+            detailOutlet: params.getParam(
+              'detailOutlet',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['outlets'],
+            ),
+          ),
+        ),
+        FFRoute(
+          name: CobamapWidget.routeName,
+          path: CobamapWidget.routePath,
+          builder: (context, params) => CobamapWidget(),
+        ),
+        FFRoute(
+          name: BSetupProfilTokoWidget.routeName,
+          path: BSetupProfilTokoWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => BSetupProfilTokoWidget(),
+        ),
+        FFRoute(
+          name: HBuatPaketWidget.routeName,
+          path: HBuatPaketWidget.routePath,
+          builder: (context, params) => HBuatPaketWidget(),
+        ),
+        FFRoute(
+          name: HEditPaketWidget.routeName,
+          path: HEditPaketWidget.routePath,
+          builder: (context, params) => HEditPaketWidget(
+            packageReference: params.getParam(
+              'packageReference',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['packages'],
+            ),
+          ),
+        ),
+        FFRoute(
+          name: BDaftarkanOutletWidget.routeName,
+          path: BDaftarkanOutletWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => BDaftarkanOutletWidget(),
+        ),
+        FFRoute(
+          name: BStatusVerifOutletWidget.routeName,
+          path: BStatusVerifOutletWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => BStatusVerifOutletWidget(),
+        ),
+        FFRoute(
+          name: PProfileTokoWidget.routeName,
+          path: PProfileTokoWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => PProfileTokoWidget(),
+        ),
+        FFRoute(
+          name: PEditProfilTokoWidget.routeName,
+          path: PEditProfilTokoWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => PEditProfilTokoWidget(
+            profilSaya: params.getParam(
+              'profilSaya',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['users'],
+            ),
+          ),
+        ),
+        FFRoute(
+          name: DaftarAlamatPageWidget.routeName,
+          path: DaftarAlamatPageWidget.routePath,
+          builder: (context, params) => DaftarAlamatPageWidget(),
+        ),
+        FFRoute(
+          name: TambahAlamatWidget.routeName,
+          path: TambahAlamatWidget.routePath,
+          builder: (context, params) => TambahAlamatWidget(),
+        ),
+        FFRoute(
+          name: OrderKonfirmBayarWidget.routeName,
+          path: OrderKonfirmBayarWidget.routePath,
+          builder: (context, params) => OrderKonfirmBayarWidget(),
+        ),
+        FFRoute(
+          name: HomePageCopyWidget.routeName,
+          path: HomePageCopyWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => HomePageCopyWidget(),
+        ),
+        FFRoute(
+          name: OrderPageWidget.routeName,
+          path: OrderPageWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => OrderPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -311,6 +530,40 @@ extension NavParamExtensions on Map<String, String?> {
 }
 
 extension NavigationExtensions on BuildContext {
+  void goNamedAuth(
+    String name,
+    bool mounted, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, String> queryParameters = const <String, String>{},
+    Object? extra,
+    bool ignoreRedirect = false,
+  }) =>
+      !mounted || GoRouter.of(this).shouldRedirect(ignoreRedirect)
+          ? null
+          : goNamed(
+              name,
+              pathParameters: pathParameters,
+              queryParameters: queryParameters,
+              extra: extra,
+            );
+
+  void pushNamedAuth(
+    String name,
+    bool mounted, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, String> queryParameters = const <String, String>{},
+    Object? extra,
+    bool ignoreRedirect = false,
+  }) =>
+      !mounted || GoRouter.of(this).shouldRedirect(ignoreRedirect)
+          ? null
+          : pushNamed(
+              name,
+              pathParameters: pathParameters,
+              queryParameters: queryParameters,
+              extra: extra,
+            );
+
   void safePop() {
     // If there is only one route on the stack, navigate to the initial
     // page instead of popping.
@@ -320,6 +573,19 @@ extension NavigationExtensions on BuildContext {
       go('/');
     }
   }
+}
+
+extension GoRouterExtensions on GoRouter {
+  AppStateNotifier get appState => AppStateNotifier.instance;
+  void prepareAuthEvent([bool ignoreRedirect = false]) =>
+      appState.hasRedirect() && !ignoreRedirect
+          ? null
+          : appState.updateNotifyOnAuthChange(false);
+  bool shouldRedirect(bool ignoreRedirect) =>
+      !ignoreRedirect && appState.hasRedirect();
+  void clearRedirectLocation() => appState.clearRedirectLocation();
+  void setRedirectLocationIfUnset(String location) =>
+      appState.updateNotifyOnAuthChange(false);
 }
 
 extension _GoRouterStateExtensions on GoRouterState {
@@ -414,6 +680,19 @@ class FFRoute {
   GoRoute toRoute(AppStateNotifier appStateNotifier) => GoRoute(
         name: name,
         path: path,
+        redirect: (context, state) {
+          if (appStateNotifier.shouldRedirect) {
+            final redirectLocation = appStateNotifier.getRedirectLocation();
+            appStateNotifier.clearRedirectLocation();
+            return redirectLocation;
+          }
+
+          if (requireAuth && !appStateNotifier.loggedIn) {
+            appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
+            return '/login';
+          }
+          return null;
+        },
         pageBuilder: (context, state) {
           fixStatusBarOniOS16AndBelow(context);
           final ffParams = FFParameters(state, asyncParams);
@@ -423,7 +702,19 @@ class FFRoute {
                   builder: (context, _) => builder(context, ffParams),
                 )
               : builder(context, ffParams);
-          final child = page;
+          final child = appStateNotifier.loading
+              ? Center(
+                  child: SizedBox(
+                    width: 50.0,
+                    height: 50.0,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xFFFF8C00),
+                      ),
+                    ),
+                  ),
+                )
+              : page;
 
           final transitionInfo = state.transitionInfo;
           return transitionInfo.hasTransition

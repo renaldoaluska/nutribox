@@ -1,12 +1,34 @@
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'customer_order1_model.dart';
 export 'customer_order1_model.dart';
 
 class CustomerOrder1Widget extends StatefulWidget {
-  const CustomerOrder1Widget({super.key});
+  const CustomerOrder1Widget({
+    super.key,
+    this.namaCust,
+    this.tanggalPesan,
+    String? namaOutlet,
+    this.nomorID,
+    required this.status,
+    required this.warnaStatus,
+    this.totalBayar,
+    this.refKeOrder,
+  }) : this.namaOutlet = namaOutlet ?? 'Nama Outlet : ';
+
+  final String? namaCust;
+  final String? tanggalPesan;
+  final String namaOutlet;
+  final String? nomorID;
+  final Status? status;
+  final Color? warnaStatus;
+  final String? totalBayar;
+  final DocumentReference? refKeOrder;
 
   @override
   State<CustomerOrder1Widget> createState() => _CustomerOrder1WidgetState();
@@ -67,7 +89,10 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'ID #14',
+                    valueOrDefault<String>(
+                      widget.nomorID,
+                      'Nomor ID',
+                    ),
                     style: FlutterFlowTheme.of(context).bodySmall.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.w500,
@@ -87,13 +112,16 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
                     padding: EdgeInsetsDirectional.fromSTEB(8.0, 4.0, 8.0, 4.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFFE8F5E9),
+                        color: functions.getStatusColor(widget.status),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'Diterima',
+                          valueOrDefault<String>(
+                            widget.status?.name,
+                            'status',
+                          ),
                           style:
                               FlutterFlowTheme.of(context).bodySmall.override(
                                     font: GoogleFonts.inter(
@@ -119,7 +147,10 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                 child: Text(
-                  'Maya Sari',
+                  valueOrDefault<String>(
+                    widget.namaCust,
+                    'Nama Cust',
+                  ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.inter(
                           fontWeight: FontWeight.w600,
@@ -138,7 +169,10 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 0.0),
                 child: Text(
-                  'Tanggal Pesan: 14 Des 2024, 16:45',
+                  valueOrDefault<String>(
+                    widget.tanggalPesan,
+                    'Tanggal Pemesanan',
+                  ),
                   style: FlutterFlowTheme.of(context).bodySmall.override(
                         font: GoogleFonts.inter(
                           fontWeight:
@@ -159,7 +193,10 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                 child: Text(
-                  'Outlet: Catering Nusantara Barat',
+                  valueOrDefault<String>(
+                    widget.namaOutlet,
+                    'Nama Outlet',
+                  ),
                   style: FlutterFlowTheme.of(context).bodySmall.override(
                         font: GoogleFonts.inter(
                           fontWeight:
@@ -220,7 +257,7 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 2.0, 0.0, 0.0),
                         child: Text(
-                          'Rp 275.000',
+                          'Rp',
                           style:
                               FlutterFlowTheme.of(context).bodyLarge.override(
                                     font: GoogleFonts.inter(
@@ -241,25 +278,67 @@ class _CustomerOrder1WidgetState extends State<CustomerOrder1Widget> {
                       ),
                     ],
                   ),
+                  Flexible(
+                    child: Align(
+                      alignment: AlignmentDirectional(-2.4, 0.0),
+                      child: Text(
+                        valueOrDefault<String>(
+                          widget.totalBayar,
+                          'Total Bayar',
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: Color(0xFFFE8C00),
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                    child: Text(
-                      'Lihat Detail Pesanan',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(
+                          OrderDetailPageWidget.routeName,
+                          queryParameters: {
+                            'orderDetail': serializeParam(
+                              widget.refKeOrder,
+                              ParamType.DocumentReference,
+                            ),
+                          }.withoutNulls,
+                        );
+                      },
+                      child: Text(
+                        'Lihat Detail Pesanan',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: Color(0xFFFE8C00),
+                              fontSize: 14.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            color: Color(0xFFFE8C00),
-                            fontSize: 14.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
+                      ),
                     ),
                   ),
                 ],

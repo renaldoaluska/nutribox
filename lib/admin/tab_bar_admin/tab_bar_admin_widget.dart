@@ -115,8 +115,6 @@ class _TabBarAdminWidgetState extends State<TabBarAdminWidget> {
                 onTap: () async {
                   FFAppState().Tabbar = 1;
                   safeSetState(() {});
-
-                  context.pushNamed(MyCartPageWidget.routeName);
                 },
                 child: Container(
                   decoration: BoxDecoration(),

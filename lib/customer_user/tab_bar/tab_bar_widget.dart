@@ -116,7 +116,7 @@ class _TabBarWidgetState extends State<TabBarWidget> {
                   FFAppState().Tabbar = 1;
                   safeSetState(() {});
 
-                  context.pushNamed(MyCartPageWidget.routeName);
+                  context.pushNamed(OrderPageWidget.routeName);
                 },
                 child: Container(
                   decoration: BoxDecoration(),

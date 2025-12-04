@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/enums/enums.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -35,16 +36,6 @@ class OutletsRecord extends FirestoreRecord {
   LatLng? get geo => _geo;
   bool hasGeo() => _geo != null;
 
-  // "lead_time_days" field.
-  int? _leadTimeDays;
-  int get leadTimeDays => _leadTimeDays ?? 0;
-  bool hasLeadTimeDays() => _leadTimeDays != null;
-
-  // "rating" field.
-  int? _rating;
-  int get rating => _rating ?? 0;
-  bool hasRating() => _rating != null;
-
   // "created_at" field.
   DateTime? _createdAt;
   DateTime? get createdAt => _createdAt;
@@ -60,16 +51,38 @@ class OutletsRecord extends FirestoreRecord {
   String get desc => _desc ?? '';
   bool hasDesc() => _desc != null;
 
+  // "status" field.
+  OutletStatus? _status;
+  OutletStatus? get status => _status;
+  bool hasStatus() => _status != null;
+
+  // "harga_per_km" field.
+  double? _hargaPerKm;
+  double get hargaPerKm => _hargaPerKm ?? 0.0;
+  bool hasHargaPerKm() => _hargaPerKm != null;
+
+  // "status_outlet_buka_tutup" field.
+  StatusOutletBukaTutup? _statusOutletBukaTutup;
+  StatusOutletBukaTutup? get statusOutletBukaTutup => _statusOutletBukaTutup;
+  bool hasStatusOutletBukaTutup() => _statusOutletBukaTutup != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _ownerRef = snapshotData['owner_ref'] as DocumentReference?;
     _address = snapshotData['address'] as String?;
     _geo = snapshotData['geo'] as LatLng?;
-    _leadTimeDays = castToType<int>(snapshotData['lead_time_days']);
-    _rating = castToType<int>(snapshotData['rating']);
     _createdAt = snapshotData['created_at'] as DateTime?;
     _photoUrl = snapshotData['photo_url'] as String?;
     _desc = snapshotData['desc'] as String?;
+    _status = snapshotData['status'] is OutletStatus
+        ? snapshotData['status']
+        : deserializeEnum<OutletStatus>(snapshotData['status']);
+    _hargaPerKm = castToType<double>(snapshotData['harga_per_km']);
+    _statusOutletBukaTutup =
+        snapshotData['status_outlet_buka_tutup'] is StatusOutletBukaTutup
+            ? snapshotData['status_outlet_buka_tutup']
+            : deserializeEnum<StatusOutletBukaTutup>(
+                snapshotData['status_outlet_buka_tutup']);
   }
 
   static CollectionReference get collection =>
@@ -111,11 +124,12 @@ Map<String, dynamic> createOutletsRecordData({
   DocumentReference? ownerRef,
   String? address,
   LatLng? geo,
-  int? leadTimeDays,
-  int? rating,
   DateTime? createdAt,
   String? photoUrl,
   String? desc,
+  OutletStatus? status,
+  double? hargaPerKm,
+  StatusOutletBukaTutup? statusOutletBukaTutup,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -123,11 +137,12 @@ Map<String, dynamic> createOutletsRecordData({
       'owner_ref': ownerRef,
       'address': address,
       'geo': geo,
-      'lead_time_days': leadTimeDays,
-      'rating': rating,
       'created_at': createdAt,
       'photo_url': photoUrl,
       'desc': desc,
+      'status': status,
+      'harga_per_km': hargaPerKm,
+      'status_outlet_buka_tutup': statusOutletBukaTutup,
     }.withoutNulls,
   );
 
@@ -143,11 +158,12 @@ class OutletsRecordDocumentEquality implements Equality<OutletsRecord> {
         e1?.ownerRef == e2?.ownerRef &&
         e1?.address == e2?.address &&
         e1?.geo == e2?.geo &&
-        e1?.leadTimeDays == e2?.leadTimeDays &&
-        e1?.rating == e2?.rating &&
         e1?.createdAt == e2?.createdAt &&
         e1?.photoUrl == e2?.photoUrl &&
-        e1?.desc == e2?.desc;
+        e1?.desc == e2?.desc &&
+        e1?.status == e2?.status &&
+        e1?.hargaPerKm == e2?.hargaPerKm &&
+        e1?.statusOutletBukaTutup == e2?.statusOutletBukaTutup;
   }
 
   @override
@@ -156,11 +172,12 @@ class OutletsRecordDocumentEquality implements Equality<OutletsRecord> {
         e?.ownerRef,
         e?.address,
         e?.geo,
-        e?.leadTimeDays,
-        e?.rating,
         e?.createdAt,
         e?.photoUrl,
-        e?.desc
+        e?.desc,
+        e?.status,
+        e?.hargaPerKm,
+        e?.statusOutletBukaTutup
       ]);
 
   @override

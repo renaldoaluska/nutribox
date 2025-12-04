@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 
 enum Status {
-  pending,
+  menunggu_pembayaran,
+  terbayar,
   dikonfirmasi,
   diproses,
   sedang_dikirim,
   telah_dikirim,
   selesai,
-  menunggu_pembayaran,
   dibatalkan,
 }
 
@@ -25,22 +25,9 @@ enum PaymentStatus {
   failed,
 }
 
-enum DeliveryType {
-  delivery,
-  pickup,
-}
-
 enum PaymentMethod {
   bank_transfer,
   ewallet,
-  cash_on_delivery,
-}
-
-enum MessageType {
-  text,
-  image,
-  location,
-  file,
 }
 
 enum NotificationType {
@@ -50,15 +37,15 @@ enum NotificationType {
   system,
 }
 
-enum OrderType {
-  instant,
-  preorder,
-  subscription,
+enum OutletStatus {
+  verified,
+  pending,
+  rejected,
 }
 
-enum PackageType {
-  once,
-  subscription,
+enum StatusOutletBukaTutup {
+  Buka,
+  Tutup,
 }
 
 extension FFEnumExtensions<T extends Enum> on T {
@@ -78,18 +65,14 @@ T? deserializeEnum<T>(String? value) {
       return UserRole.values.deserialize(value) as T?;
     case (PaymentStatus):
       return PaymentStatus.values.deserialize(value) as T?;
-    case (DeliveryType):
-      return DeliveryType.values.deserialize(value) as T?;
     case (PaymentMethod):
       return PaymentMethod.values.deserialize(value) as T?;
-    case (MessageType):
-      return MessageType.values.deserialize(value) as T?;
     case (NotificationType):
       return NotificationType.values.deserialize(value) as T?;
-    case (OrderType):
-      return OrderType.values.deserialize(value) as T?;
-    case (PackageType):
-      return PackageType.values.deserialize(value) as T?;
+    case (OutletStatus):
+      return OutletStatus.values.deserialize(value) as T?;
+    case (StatusOutletBukaTutup):
+      return StatusOutletBukaTutup.values.deserialize(value) as T?;
     default:
       return null;
   }

@@ -15,36 +15,12 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /outlets/{parent}/packages/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
-    }
-
-    match /{path=**}/packages/{document} {
-      allow read: if true;
-    }
-
-
     match /orders/{document} {
       allow create: if true;
       allow read: if true;
       allow write: if false;
       allow delete: if false;
     }
-
-    match /orders/{parent}/items/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
-    }
-
-    match /{path=**}/items/{document} {
-      allow read: if true;
-    }
-
 
     match /payments/{document} {
       allow create: if true;
@@ -59,18 +35,6 @@ service cloud.firestore {
       allow write: if false;
       allow delete: if false;
     }
-
-    match /chats/{parent}/messages/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
-    }
-
-    match /{path=**}/messages/{document} {
-      allow read: if true;
-    }
-
 
     match /notifications/{document} {
       allow create: if true;
@@ -87,6 +51,34 @@ service cloud.firestore {
     }
 
     match /addresses/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /packages/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /chat_messages/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /order_item/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /user_carts/{document} {
       allow create: if true;
       allow read: if true;
       allow write: if false;

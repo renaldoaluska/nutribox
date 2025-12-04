@@ -1,4 +1,5 @@
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'e_room_chat_widget.dart' show ERoomChatWidget;
 import 'package:flutter/material.dart';
 

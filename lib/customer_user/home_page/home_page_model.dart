@@ -11,13 +11,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
-  // State field(s) for TabBar widget.
-  TabController? tabBarController;
-  int get tabBarCurrentIndex =>
-      tabBarController != null ? tabBarController!.index : 0;
-  int get tabBarPreviousIndex =>
-      tabBarController != null ? tabBarController!.previousIndex : 0;
-
   // Model for Tab_bar component.
   late TabBarModel tabBarModel;
 
@@ -28,7 +21,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
 
   @override
   void dispose() {
-    tabBarController?.dispose();
     tabBarModel.dispose();
   }
 }

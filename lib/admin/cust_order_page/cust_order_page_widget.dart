@@ -1,10 +1,12 @@
 import '/admin/customer_order1/customer_order1_widget.dart';
-import '/admin/customer_order2/customer_order2_widget.dart';
-import '/admin/customer_order3/customer_order3_widget.dart';
 import '/admin/customer_search/customer_search_widget.dart';
 import '/admin/navbars/navbars_widget.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'cust_order_page_model.dart';
@@ -69,90 +71,203 @@ class _CustOrderPageWidgetState extends State<CustOrderPageWidget> {
                       FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                 ),
           ),
-          actions: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-              child: Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFE8C00),
-                  shape: BoxShape.circle,
-                ),
-                child: Align(
-                  alignment: AlignmentDirectional(0.0, 0.0),
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 24.0,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          actions: [],
           centerTitle: false,
           elevation: 0.0,
         ),
         body: SafeArea(
           top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        wrapWithModel(
-                          model: _model.customerSearchModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: CustomerSearchWidget(),
-                        ),
-                        wrapWithModel(
-                          model: _model.customerOrder1Model,
-                          updateCallback: () => safeSetState(() {}),
-                          child: CustomerOrder1Widget(),
-                        ),
-                        InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            Navigator.pop(context);
-                          },
-                          child: wrapWithModel(
-                            model: _model.customerOrder3Model,
-                            updateCallback: () => safeSetState(() {}),
-                            child: CustomerOrder3Widget(),
+          child: Builder(
+            builder: (context) {
+              if (currentUserDocument?.role == UserRole.admin) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              wrapWithModel(
+                                model: _model.customerSearchModel,
+                                updateCallback: () => safeSetState(() {}),
+                                child: CustomerSearchWidget(),
+                              ),
+                              StreamBuilder<List<OrdersRecord>>(
+                                stream: queryOrdersRecord(),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            Color(0xFFFF8C00),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<OrdersRecord> wrapOrdersRecordList =
+                                      snapshot.data!;
+
+                                  return Wrap(
+                                    spacing: 0.0,
+                                    runSpacing: 0.0,
+                                    alignment: WrapAlignment.start,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    direction: Axis.horizontal,
+                                    runAlignment: WrapAlignment.start,
+                                    verticalDirection: VerticalDirection.down,
+                                    clipBehavior: Clip.none,
+                                    children: List.generate(
+                                        wrapOrdersRecordList.length,
+                                        (wrapIndex) {
+                                      final wrapOrdersRecord =
+                                          wrapOrdersRecordList[wrapIndex];
+                                      return StreamBuilder<OutletsRecord>(
+                                        stream: OutletsRecord.getDocument(
+                                            wrapOrdersRecord.outletRef!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    Color(0xFFFF8C00),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+
+                                          final columnOutletsRecord =
+                                              snapshot.data!;
+
+                                          return Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              StreamBuilder<UsersRecord>(
+                                                stream: UsersRecord.getDocument(
+                                                    wrapOrdersRecord
+                                                        .customerRef!),
+                                                builder: (context, snapshot) {
+                                                  // Customize what your widget looks like when it's loading.
+                                                  if (!snapshot.hasData) {
+                                                    return Center(
+                                                      child: SizedBox(
+                                                        width: 50.0,
+                                                        height: 50.0,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                            Color(0xFFFF8C00),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+
+                                                  final customerOrder1UsersRecord =
+                                                      snapshot.data!;
+
+                                                  return CustomerOrder1Widget(
+                                                    key: Key(
+                                                        'Key01h_${wrapIndex}_of_${wrapOrdersRecordList.length}'),
+                                                    namaCust:
+                                                        customerOrder1UsersRecord
+                                                            .displayName,
+                                                    tanggalPesan:
+                                                        wrapOrdersRecord
+                                                            .createdAt
+                                                            ?.toString(),
+                                                    namaOutlet:
+                                                        columnOutletsRecord
+                                                            .name,
+                                                    nomorID: wrapOrdersRecord
+                                                        .reference.id,
+                                                    warnaStatus: functions
+                                                        .getStatusColor(
+                                                            wrapOrdersRecord
+                                                                .status)!,
+                                                    status: wrapOrdersRecord
+                                                        .status!,
+                                                    totalBayar: wrapOrdersRecord
+                                                        .totalAmount
+                                                        .toString(),
+                                                    refKeOrder: wrapOrdersRecord
+                                                        .reference,
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                            ].divide(SizedBox(height: 16.0)),
                           ),
                         ),
-                        wrapWithModel(
-                          model: _model.customerOrder2Model,
-                          updateCallback: () => safeSetState(() {}),
-                          child: CustomerOrder2Widget(),
-                        ),
-                      ].divide(SizedBox(height: 16.0)),
+                      ),
                     ),
+                    Container(
+                      width: 393.2,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: wrapWithModel(
+                        model: _model.navbarsModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: NavbarsWidget(),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Align(
+                  alignment: AlignmentDirectional(0.0, 0.0),
+                  child: Text(
+                    'Anda Tidak Terverifikasi Sebagai Admin!',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          font: GoogleFonts.inter(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                          letterSpacing: 0.0,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
                   ),
-                ),
-              ),
-              Container(
-                width: 393.19,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: wrapWithModel(
-                  model: _model.navbarsModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: NavbarsWidget(),
-                ),
-              ),
-            ],
+                );
+              }
+            },
           ),
         ),
       ),

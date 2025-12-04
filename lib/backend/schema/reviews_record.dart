@@ -45,11 +45,6 @@ class ReviewsRecord extends FirestoreRecord {
   DateTime? get createdAt => _createdAt;
   bool hasCreatedAt() => _createdAt != null;
 
-  // "review_id" field.
-  String? _reviewId;
-  String get reviewId => _reviewId ?? '';
-  bool hasReviewId() => _reviewId != null;
-
   void _initializeFields() {
     _orderRef = snapshotData['order_ref'] as DocumentReference?;
     _outletRef = snapshotData['outlet_ref'] as DocumentReference?;
@@ -57,7 +52,6 @@ class ReviewsRecord extends FirestoreRecord {
     _rating = castToType<int>(snapshotData['rating']);
     _comment = snapshotData['comment'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
-    _reviewId = snapshotData['review_id'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -101,7 +95,6 @@ Map<String, dynamic> createReviewsRecordData({
   int? rating,
   String? comment,
   DateTime? createdAt,
-  String? reviewId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -111,7 +104,6 @@ Map<String, dynamic> createReviewsRecordData({
       'rating': rating,
       'comment': comment,
       'created_at': createdAt,
-      'review_id': reviewId,
     }.withoutNulls,
   );
 
@@ -128,8 +120,7 @@ class ReviewsRecordDocumentEquality implements Equality<ReviewsRecord> {
         e1?.customerRef == e2?.customerRef &&
         e1?.rating == e2?.rating &&
         e1?.comment == e2?.comment &&
-        e1?.createdAt == e2?.createdAt &&
-        e1?.reviewId == e2?.reviewId;
+        e1?.createdAt == e2?.createdAt;
   }
 
   @override
@@ -139,8 +130,7 @@ class ReviewsRecordDocumentEquality implements Equality<ReviewsRecord> {
         e?.customerRef,
         e?.rating,
         e?.comment,
-        e?.createdAt,
-        e?.reviewId
+        e?.createdAt
       ]);
 
   @override

@@ -26,11 +26,6 @@ class OrdersRecord extends FirestoreRecord {
   DocumentReference? get outletRef => _outletRef;
   bool hasOutletRef() => _outletRef != null;
 
-  // "type" field.
-  OrderType? _type;
-  OrderType? get type => _type;
-  bool hasType() => _type != null;
-
   // "total_amount" field.
   double? _totalAmount;
   double get totalAmount => _totalAmount ?? 0.0;
@@ -41,35 +36,10 @@ class OrdersRecord extends FirestoreRecord {
   Status? get status => _status;
   bool hasStatus() => _status != null;
 
-  // "payment_status" field.
-  PaymentStatus? _paymentStatus;
-  PaymentStatus? get paymentStatus => _paymentStatus;
-  bool hasPaymentStatus() => _paymentStatus != null;
-
-  // "delivery_type" field.
-  DeliveryType? _deliveryType;
-  DeliveryType? get deliveryType => _deliveryType;
-  bool hasDeliveryType() => _deliveryType != null;
-
   // "scheduled_At" field.
   DateTime? _scheduledAt;
   DateTime? get scheduledAt => _scheduledAt;
   bool hasScheduledAt() => _scheduledAt != null;
-
-  // "subscription_start_date" field.
-  DateTime? _subscriptionStartDate;
-  DateTime? get subscriptionStartDate => _subscriptionStartDate;
-  bool hasSubscriptionStartDate() => _subscriptionStartDate != null;
-
-  // "subscription_end_date" field.
-  DateTime? _subscriptionEndDate;
-  DateTime? get subscriptionEndDate => _subscriptionEndDate;
-  bool hasSubscriptionEndDate() => _subscriptionEndDate != null;
-
-  // "scheduled" field.
-  String? _scheduled;
-  String get scheduled => _scheduled ?? '';
-  bool hasScheduled() => _scheduled != null;
 
   // "notes" field.
   String? _notes;
@@ -86,30 +56,23 @@ class OrdersRecord extends FirestoreRecord {
   DateTime? get updatedAt => _updatedAt;
   bool hasUpdatedAt() => _updatedAt != null;
 
+  // "address_ref" field.
+  DocumentReference? _addressRef;
+  DocumentReference? get addressRef => _addressRef;
+  bool hasAddressRef() => _addressRef != null;
+
   void _initializeFields() {
     _customerRef = snapshotData['customer_Ref'] as DocumentReference?;
     _outletRef = snapshotData['outlet_ref'] as DocumentReference?;
-    _type = snapshotData['type'] is OrderType
-        ? snapshotData['type']
-        : deserializeEnum<OrderType>(snapshotData['type']);
     _totalAmount = castToType<double>(snapshotData['total_amount']);
     _status = snapshotData['status'] is Status
         ? snapshotData['status']
         : deserializeEnum<Status>(snapshotData['status']);
-    _paymentStatus = snapshotData['payment_status'] is PaymentStatus
-        ? snapshotData['payment_status']
-        : deserializeEnum<PaymentStatus>(snapshotData['payment_status']);
-    _deliveryType = snapshotData['delivery_type'] is DeliveryType
-        ? snapshotData['delivery_type']
-        : deserializeEnum<DeliveryType>(snapshotData['delivery_type']);
     _scheduledAt = snapshotData['scheduled_At'] as DateTime?;
-    _subscriptionStartDate =
-        snapshotData['subscription_start_date'] as DateTime?;
-    _subscriptionEndDate = snapshotData['subscription_end_date'] as DateTime?;
-    _scheduled = snapshotData['scheduled'] as String?;
     _notes = snapshotData['notes'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
     _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _addressRef = snapshotData['address_ref'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -148,35 +111,25 @@ class OrdersRecord extends FirestoreRecord {
 Map<String, dynamic> createOrdersRecordData({
   DocumentReference? customerRef,
   DocumentReference? outletRef,
-  OrderType? type,
   double? totalAmount,
   Status? status,
-  PaymentStatus? paymentStatus,
-  DeliveryType? deliveryType,
   DateTime? scheduledAt,
-  DateTime? subscriptionStartDate,
-  DateTime? subscriptionEndDate,
-  String? scheduled,
   String? notes,
   DateTime? createdAt,
   DateTime? updatedAt,
+  DocumentReference? addressRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'customer_Ref': customerRef,
       'outlet_ref': outletRef,
-      'type': type,
       'total_amount': totalAmount,
       'status': status,
-      'payment_status': paymentStatus,
-      'delivery_type': deliveryType,
       'scheduled_At': scheduledAt,
-      'subscription_start_date': subscriptionStartDate,
-      'subscription_end_date': subscriptionEndDate,
-      'scheduled': scheduled,
       'notes': notes,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'address_ref': addressRef,
     }.withoutNulls,
   );
 
@@ -190,36 +143,26 @@ class OrdersRecordDocumentEquality implements Equality<OrdersRecord> {
   bool equals(OrdersRecord? e1, OrdersRecord? e2) {
     return e1?.customerRef == e2?.customerRef &&
         e1?.outletRef == e2?.outletRef &&
-        e1?.type == e2?.type &&
         e1?.totalAmount == e2?.totalAmount &&
         e1?.status == e2?.status &&
-        e1?.paymentStatus == e2?.paymentStatus &&
-        e1?.deliveryType == e2?.deliveryType &&
         e1?.scheduledAt == e2?.scheduledAt &&
-        e1?.subscriptionStartDate == e2?.subscriptionStartDate &&
-        e1?.subscriptionEndDate == e2?.subscriptionEndDate &&
-        e1?.scheduled == e2?.scheduled &&
         e1?.notes == e2?.notes &&
         e1?.createdAt == e2?.createdAt &&
-        e1?.updatedAt == e2?.updatedAt;
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.addressRef == e2?.addressRef;
   }
 
   @override
   int hash(OrdersRecord? e) => const ListEquality().hash([
         e?.customerRef,
         e?.outletRef,
-        e?.type,
         e?.totalAmount,
         e?.status,
-        e?.paymentStatus,
-        e?.deliveryType,
         e?.scheduledAt,
-        e?.subscriptionStartDate,
-        e?.subscriptionEndDate,
-        e?.scheduled,
         e?.notes,
         e?.createdAt,
-        e?.updatedAt
+        e?.updatedAt,
+        e?.addressRef
       ]);
 
   @override

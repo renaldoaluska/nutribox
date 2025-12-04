@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/enums/enums.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -41,27 +40,30 @@ class PackagesRecord extends FirestoreRecord {
   bool get available => _available ?? false;
   bool hasAvailable() => _available != null;
 
-  // "image_url" field.
-  String? _imageUrl;
-  String get imageUrl => _imageUrl ?? '';
-  bool hasImageUrl() => _imageUrl != null;
-
   // "created_at" field.
   DateTime? _createdAt;
   DateTime? get createdAt => _createdAt;
   bool hasCreatedAt() => _createdAt != null;
-
-  // "package_type" field.
-  PackageType? _packageType;
-  PackageType? get packageType => _packageType;
-  bool hasPackageType() => _packageType != null;
 
   // "photo_url" field.
   String? _photoUrl;
   String get photoUrl => _photoUrl ?? '';
   bool hasPhotoUrl() => _photoUrl != null;
 
-  DocumentReference get parentReference => reference.parent.parent!;
+  // "max_qty" field.
+  int? _maxQty;
+  int get maxQty => _maxQty ?? 0;
+  bool hasMaxQty() => _maxQty != null;
+
+  // "deleted" field.
+  bool? _deleted;
+  bool get deleted => _deleted ?? false;
+  bool hasDeleted() => _deleted != null;
+
+  // "outlet_ref" field.
+  DocumentReference? _outletRef;
+  DocumentReference? get outletRef => _outletRef;
+  bool hasOutletRef() => _outletRef != null;
 
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
@@ -69,21 +71,15 @@ class PackagesRecord extends FirestoreRecord {
     _pricePerUnit = castToType<double>(snapshotData['price_per_unit']);
     _minQty = castToType<int>(snapshotData['min_qty']);
     _available = snapshotData['available'] as bool?;
-    _imageUrl = snapshotData['image_url'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
-    _packageType = snapshotData['package_type'] is PackageType
-        ? snapshotData['package_type']
-        : deserializeEnum<PackageType>(snapshotData['package_type']);
     _photoUrl = snapshotData['photo_url'] as String?;
+    _maxQty = castToType<int>(snapshotData['max_qty']);
+    _deleted = snapshotData['deleted'] as bool?;
+    _outletRef = snapshotData['outlet_ref'] as DocumentReference?;
   }
 
-  static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
-      parent != null
-          ? parent.collection('packages')
-          : FirebaseFirestore.instance.collectionGroup('packages');
-
-  static DocumentReference createDoc(DocumentReference parent, {String? id}) =>
-      parent.collection('packages').doc(id);
+  static CollectionReference get collection =>
+      FirebaseFirestore.instance.collection('packages');
 
   static Stream<PackagesRecord> getDocument(DocumentReference ref) =>
       ref.snapshots().map((s) => PackagesRecord.fromSnapshot(s));
@@ -122,10 +118,11 @@ Map<String, dynamic> createPackagesRecordData({
   double? pricePerUnit,
   int? minQty,
   bool? available,
-  String? imageUrl,
   DateTime? createdAt,
-  PackageType? packageType,
   String? photoUrl,
+  int? maxQty,
+  bool? deleted,
+  DocumentReference? outletRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -134,10 +131,11 @@ Map<String, dynamic> createPackagesRecordData({
       'price_per_unit': pricePerUnit,
       'min_qty': minQty,
       'available': available,
-      'image_url': imageUrl,
       'created_at': createdAt,
-      'package_type': packageType,
       'photo_url': photoUrl,
+      'max_qty': maxQty,
+      'deleted': deleted,
+      'outlet_ref': outletRef,
     }.withoutNulls,
   );
 
@@ -154,10 +152,11 @@ class PackagesRecordDocumentEquality implements Equality<PackagesRecord> {
         e1?.pricePerUnit == e2?.pricePerUnit &&
         e1?.minQty == e2?.minQty &&
         e1?.available == e2?.available &&
-        e1?.imageUrl == e2?.imageUrl &&
         e1?.createdAt == e2?.createdAt &&
-        e1?.packageType == e2?.packageType &&
-        e1?.photoUrl == e2?.photoUrl;
+        e1?.photoUrl == e2?.photoUrl &&
+        e1?.maxQty == e2?.maxQty &&
+        e1?.deleted == e2?.deleted &&
+        e1?.outletRef == e2?.outletRef;
   }
 
   @override
@@ -167,10 +166,11 @@ class PackagesRecordDocumentEquality implements Equality<PackagesRecord> {
         e?.pricePerUnit,
         e?.minQty,
         e?.available,
-        e?.imageUrl,
         e?.createdAt,
-        e?.packageType,
-        e?.photoUrl
+        e?.photoUrl,
+        e?.maxQty,
+        e?.deleted,
+        e?.outletRef
       ]);
 
   @override

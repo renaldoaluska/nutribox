@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -148,16 +147,10 @@ class _ContainerOutletWidgetState extends State<ContainerOutletWidget> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(8.0, 4.0, 8.0, 0.0),
-            child: InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.pushNamed(OutletPageWidget.routeName);
-              },
+          Align(
+            alignment: AlignmentDirectional(-1.0, 1.0),
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(8.0, 4.0, 8.0, 0.0),
               child: Container(
                 decoration: BoxDecoration(),
                 child: Row(

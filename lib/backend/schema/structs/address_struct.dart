@@ -9,8 +9,14 @@ import '/flutter_flow/flutter_flow_util.dart';
 class AddressStruct extends FFFirebaseStruct {
   AddressStruct({
     String? street,
+    String? rt,
+    String? rw,
+    int? pos,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _street = street,
+        _rt = rt,
+        _rw = rw,
+        _pos = pos,
         super(firestoreUtilData);
 
   // "street" field.
@@ -20,8 +26,34 @@ class AddressStruct extends FFFirebaseStruct {
 
   bool hasStreet() => _street != null;
 
+  // "rt" field.
+  String? _rt;
+  String get rt => _rt ?? '';
+  set rt(String? val) => _rt = val;
+
+  bool hasRt() => _rt != null;
+
+  // "rw" field.
+  String? _rw;
+  String get rw => _rw ?? '';
+  set rw(String? val) => _rw = val;
+
+  bool hasRw() => _rw != null;
+
+  // "pos" field.
+  int? _pos;
+  int get pos => _pos ?? 0;
+  set pos(int? val) => _pos = val;
+
+  void incrementPos(int amount) => pos = pos + amount;
+
+  bool hasPos() => _pos != null;
+
   static AddressStruct fromMap(Map<String, dynamic> data) => AddressStruct(
         street: data['street'] as String?,
+        rt: data['rt'] as String?,
+        rw: data['rw'] as String?,
+        pos: castToType<int>(data['pos']),
       );
 
   static AddressStruct? maybeFromMap(dynamic data) =>
@@ -29,6 +61,9 @@ class AddressStruct extends FFFirebaseStruct {
 
   Map<String, dynamic> toMap() => {
         'street': _street,
+        'rt': _rt,
+        'rw': _rw,
+        'pos': _pos,
       }.withoutNulls;
 
   @override
@@ -36,6 +71,18 @@ class AddressStruct extends FFFirebaseStruct {
         'street': serializeParam(
           _street,
           ParamType.String,
+        ),
+        'rt': serializeParam(
+          _rt,
+          ParamType.String,
+        ),
+        'rw': serializeParam(
+          _rw,
+          ParamType.String,
+        ),
+        'pos': serializeParam(
+          _pos,
+          ParamType.int,
         ),
       }.withoutNulls;
 
@@ -46,6 +93,21 @@ class AddressStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
+        rt: deserializeParam(
+          data['rt'],
+          ParamType.String,
+          false,
+        ),
+        rw: deserializeParam(
+          data['rw'],
+          ParamType.String,
+          false,
+        ),
+        pos: deserializeParam(
+          data['pos'],
+          ParamType.int,
+          false,
+        ),
       );
 
   @override
@@ -53,15 +115,22 @@ class AddressStruct extends FFFirebaseStruct {
 
   @override
   bool operator ==(Object other) {
-    return other is AddressStruct && street == other.street;
+    return other is AddressStruct &&
+        street == other.street &&
+        rt == other.rt &&
+        rw == other.rw &&
+        pos == other.pos;
   }
 
   @override
-  int get hashCode => const ListEquality().hash([street]);
+  int get hashCode => const ListEquality().hash([street, rt, rw, pos]);
 }
 
 AddressStruct createAddressStruct({
   String? street,
+  String? rt,
+  String? rw,
+  int? pos,
   Map<String, dynamic> fieldValues = const {},
   bool clearUnsetFields = true,
   bool create = false,
@@ -69,6 +138,9 @@ AddressStruct createAddressStruct({
 }) =>
     AddressStruct(
       street: street,
+      rt: rt,
+      rw: rw,
+      pos: pos,
       firestoreUtilData: FirestoreUtilData(
         clearUnsetFields: clearUnsetFields,
         create: create,

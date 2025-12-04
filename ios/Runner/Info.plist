@@ -53,7 +53,8 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 
-
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Aplikasi butuh lokasi kamu buat nampilin peta</string>
 
 
 
